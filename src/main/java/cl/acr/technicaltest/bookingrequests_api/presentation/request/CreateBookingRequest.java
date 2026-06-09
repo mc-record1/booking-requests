@@ -1,4 +1,5 @@
-package cl.acr.technicaltest.bookingrequests_api.presentation.response;
+package cl.acr.technicaltest.bookingrequests_api.presentation.request;
+
 
 import cl.acr.technicaltest.bookingrequests_api.domain.enums.FreightMode;
 import cl.acr.technicaltest.bookingrequests_api.domain.enums.Incoterm;
@@ -9,7 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class BookingResponse {
+public class CreateBookingRequest {
 
     private Long id;
     private String bookingCode;
@@ -24,8 +25,8 @@ public class BookingResponse {
     private Status status;
     private LocalDateTime createdAt;
     private Boolean active;
-    private SupplierResponse supplier;
-    private List<BookingItemResponse> items;
+    private CreateSupplier supplier;
+    private List<CreateBookingItem> items;
 
     public Long getId() {
         return id;
@@ -131,19 +132,19 @@ public class BookingResponse {
         this.active = active;
     }
 
-    public SupplierResponse getSupplier() {
+    public CreateSupplier getSupplier() {
         return supplier;
     }
 
-    public void setSupplier(SupplierResponse supplier) {
+    public void setSupplier(CreateSupplier supplier) {
         this.supplier = supplier;
     }
 
-    public List<BookingItemResponse> getItems() {
+    public List<CreateBookingItem> getItems() {
         return items;
     }
 
-    public void setItems(List<BookingItemResponse> items) {
+    public void setItems(List<CreateBookingItem> items) {
         this.items = items;
     }
 }

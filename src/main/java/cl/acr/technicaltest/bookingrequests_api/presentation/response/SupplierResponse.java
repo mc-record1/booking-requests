@@ -1,6 +1,6 @@
-package cl.acr.technicaltest.bookingrequests_api.domain.model;
+package cl.acr.technicaltest.bookingrequests_api.presentation.response;
 
-public class Supplier {
+public class SupplierResponse {
 
     private Long id;
     private String name;
@@ -8,7 +8,6 @@ public class Supplier {
     private String country;
     private String address;
     private String contactEmail;
-
 
     public Long getId() {
         return id;

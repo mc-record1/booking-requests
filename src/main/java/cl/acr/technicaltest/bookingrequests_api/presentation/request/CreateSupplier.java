@@ -1,14 +1,12 @@
-package cl.acr.technicaltest.bookingrequests_api.domain.model;
+package cl.acr.technicaltest.bookingrequests_api.presentation.request;
 
-public class Supplier {
-
+public class CreateSupplier {
     private Long id;
     private String name;
     private String taxId;
     private String country;
     private String address;
     private String contactEmail;
-
 
     public Long getId() {
         return id;

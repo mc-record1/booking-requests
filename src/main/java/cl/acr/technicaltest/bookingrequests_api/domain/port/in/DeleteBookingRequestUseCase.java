@@ -1,4 +1,6 @@
 package cl.acr.technicaltest.bookingrequests_api.domain.port.in;
 
-public class DeleteBookingRequestUseCase {
+public interface DeleteBookingRequestUseCase {
+
+    void deleteBookingRequest(Long id);
 }
