@@ -1,14 +1,24 @@
-package cl.acr.technicaltest.bookingrequests_api.presentation.request;
+package cl.acr.technicaltest.bookingrequests_api.domain.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class BookingRequestUpdate {
 
+    private Long id;
     private LocalDate issueDate;
     private LocalDate expirationDate;
     private String currency;
     private BigDecimal fobValue;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public LocalDate getIssueDate() {
         return issueDate;

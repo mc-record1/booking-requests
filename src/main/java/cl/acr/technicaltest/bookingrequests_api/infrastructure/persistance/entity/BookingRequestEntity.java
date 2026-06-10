@@ -58,7 +58,7 @@ public class BookingRequestEntity{
     @Column(nullable = false)
     private Boolean active;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(
             name = "supplier_id",
             nullable = false

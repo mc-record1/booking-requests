@@ -1,6 +1,7 @@
 package cl.acr.technicaltest.bookingrequests_api.application.usecase;
 
 import cl.acr.technicaltest.bookingrequests_api.domain.model.BookingRequest;
+import cl.acr.technicaltest.bookingrequests_api.domain.model.BookingRequestUpdate;
 import cl.acr.technicaltest.bookingrequests_api.domain.port.in.UpdateBookingRequestUseCase;
 import cl.acr.technicaltest.bookingrequests_api.domain.port.out.BookingRequestRepository;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ public class UpdateBookingRequestUseCaseImpl implements UpdateBookingRequestUseC
     }
 
     @Override
-    public BookingRequest update(BookingRequest bookingRequest) {
+    public BookingRequest update(BookingRequestUpdate bookingRequest) {
         return repository.update(bookingRequest);
     }
 

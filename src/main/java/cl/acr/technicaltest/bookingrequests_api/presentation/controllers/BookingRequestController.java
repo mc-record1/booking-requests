@@ -6,7 +6,7 @@ import cl.acr.technicaltest.bookingrequests_api.domain.port.in.DeleteBookingRequ
 import cl.acr.technicaltest.bookingrequests_api.domain.port.in.GetBookingRequestUseCase;
 import cl.acr.technicaltest.bookingrequests_api.domain.port.in.UpdateBookingRequestUseCase;
 import cl.acr.technicaltest.bookingrequests_api.presentation.mappers.BookingSearchMapper;
-import cl.acr.technicaltest.bookingrequests_api.presentation.request.BookingRequestUpdate;
+import cl.acr.technicaltest.bookingrequests_api.presentation.request.UpdateBookingRequest;
 import cl.acr.technicaltest.bookingrequests_api.presentation.request.BookingSearchRequest;
 import cl.acr.technicaltest.bookingrequests_api.presentation.request.CreateBookingRequest;
 import cl.acr.technicaltest.bookingrequests_api.presentation.response.BookingResponse;
@@ -50,7 +50,7 @@ public class BookingRequestController {
         );
     }
 
-    @PostMapping
+    @PostMapping("/bookings")
     public ResponseEntity<BookingResponse> create(@RequestBody @Valid CreateBookingRequest request) {
         return ResponseEntity.ok(bookingSearchMapper.toResponse(
                 createBookingRequestUseCase.create(
@@ -68,24 +68,24 @@ public class BookingRequestController {
     }
 
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<BookingResponse> update(@PathVariable Long id,BookingRequestUpdate requestUpdate) {
+    @PatchMapping("/bookings/{id}")
+    public ResponseEntity<BookingResponse> update(@PathVariable Long id, @RequestBody @Valid UpdateBookingRequest requestUpdate) {
         return ResponseEntity.ok(bookingSearchMapper.toResponse(
                 updateBookingRequestUseCase.update(
                         bookingSearchMapper.toRequestUpdate(id, requestUpdate)))
         );
     }
 
-    @PatchMapping("/{id}/status")
+    @PatchMapping("/bookings/{id}/status")
     public ResponseEntity<BookingResponse> changeStatus(@PathVariable Long id, String status) {
         return ResponseEntity.ok(bookingSearchMapper.toResponse(
                 updateBookingRequestUseCase.updateStatus(id))
         );
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/bookings/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         deleteBookingRequestUseCase.deleteBookingRequest(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }

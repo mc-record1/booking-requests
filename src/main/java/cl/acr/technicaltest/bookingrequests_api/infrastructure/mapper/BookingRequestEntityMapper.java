@@ -94,48 +94,48 @@ public class BookingRequestEntityMapper {
         requestEntity.setStatus(request.getStatus());
         requestEntity.setCreatedAt(request.getCreatedAt());
         requestEntity.setActive(request.getActive());
-        requestEntity.setSupplier(toSupplierEntity(request.getSupplier()));
-        requestEntity.setItems(toBookingItemListEntity(request.getItems()));
+//        requestEntity.setSupplier(toSupplierEntity(request.getSupplier()));
+//        requestEntity.setItems(toBookingItemListEntity(request.getItems()));
 
         return requestEntity;
     }
 
-    public SupplierEntity toSupplierEntity(Supplier supplierRequest){
-        if(Objects.isNull(supplierRequest)){
-            throw new BookingNotFoundException("Error al convertir Supplier en Entity");
-        }
-        SupplierEntity supplierEntity = new SupplierEntity();
-        supplierEntity.setId(supplierRequest.getId());
-        supplierEntity.setName(supplierRequest.getName());
-        supplierEntity.setTaxId(supplierRequest.getTaxId());
-        supplierEntity.setCountry(supplierRequest.getCountry());
-        supplierEntity.setAddress(supplierRequest.getAddress());
-        supplierEntity.setContactEmail(supplierRequest.getContactEmail());
-        return supplierEntity;
-    }
-
-    public List<BookingItemEntity> toBookingItemListEntity(List<BookingItem> listBookingRequest){
-        if (listBookingRequest == null || listBookingRequest.isEmpty()) {
-            throw new BookingNotFoundException("Error al convertir las listas de BookingItem en Entity");
-        }
-
-        return listBookingRequest.stream()
-                .map(this::toBookingItemEntity)
-                .toList();
-    }
-
-    public BookingItemEntity toBookingItemEntity(BookingItem itemEntity){
-        if(Objects.isNull(itemEntity)){
-            throw new BookingNotFoundException("Error al convertir BookingItem en Entity");
-        }
-        BookingItemEntity bookingItem = new BookingItemEntity();
-        bookingItem.setId(itemEntity.getId());
-        bookingItem.setSku(itemEntity.getSku());
-        bookingItem.setDescription(itemEntity.getDescription());
-        bookingItem.setQuantity(itemEntity.getQuantity());
-        bookingItem.setUnitPrice(itemEntity.getUnitPrice());
-        bookingItem.setTotalAmount(itemEntity.getTotalMount());
-
-        return bookingItem;
-    }
+//    public SupplierEntity toSupplierEntity(Supplier supplierRequest){
+//        if(Objects.isNull(supplierRequest)){
+//            throw new BookingNotFoundException("Error al convertir Supplier en Entity");
+//        }
+//        SupplierEntity supplierEntity = new SupplierEntity();
+//        supplierEntity.setId(supplierRequest.getId());
+//        supplierEntity.setName(supplierRequest.getName());
+//        supplierEntity.setTaxId(supplierRequest.getTaxId());
+//        supplierEntity.setCountry(supplierRequest.getCountry());
+//        supplierEntity.setAddress(supplierRequest.getAddress());
+//        supplierEntity.setContactEmail(supplierRequest.getContactEmail());
+//        return supplierEntity;
+//    }
+//
+//    public List<BookingItemEntity> toBookingItemListEntity(List<BookingItem> listBookingRequest){
+//        if (listBookingRequest == null || listBookingRequest.isEmpty()) {
+//            throw new BookingNotFoundException("Error al convertir las listas de BookingItem en Entity");
+//        }
+//
+//        return listBookingRequest.stream()
+//                .map(this::toBookingItemEntity)
+//                .toList();
+//    }
+//
+//    public BookingItemEntity toBookingItemEntity(BookingItem itemEntity){
+//        if(Objects.isNull(itemEntity)){
+//            throw new BookingNotFoundException("Error al convertir BookingItem en Entity");
+//        }
+//        BookingItemEntity bookingItem = new BookingItemEntity();
+//        bookingItem.setId(itemEntity.getId());
+//        bookingItem.setSku(itemEntity.getSku());
+//        bookingItem.setDescription(itemEntity.getDescription());
+//        bookingItem.setQuantity(itemEntity.getQuantity());
+//        bookingItem.setUnitPrice(itemEntity.getUnitPrice());
+//        bookingItem.setTotalAmount(itemEntity.getTotalMount());
+//
+//        return bookingItem;
+//    }
 }

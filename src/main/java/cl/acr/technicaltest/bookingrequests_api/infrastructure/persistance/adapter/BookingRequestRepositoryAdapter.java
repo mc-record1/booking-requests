@@ -1,16 +1,23 @@
 package cl.acr.technicaltest.bookingrequests_api.infrastructure.persistance.adapter;
 
 import cl.acr.technicaltest.bookingrequests_api.domain.enums.Status;
-import cl.acr.technicaltest.bookingrequests_api.domain.exceptions.BusinessException;
+
+import cl.acr.technicaltest.bookingrequests_api.domain.model.BookingItem;
 import cl.acr.technicaltest.bookingrequests_api.domain.model.BookingRequest;
+import cl.acr.technicaltest.bookingrequests_api.domain.model.BookingRequestUpdate;
 import cl.acr.technicaltest.bookingrequests_api.domain.model.BookingSearchCriteria;
 import cl.acr.technicaltest.bookingrequests_api.domain.port.out.BookingRequestRepository;
 import cl.acr.technicaltest.bookingrequests_api.infrastructure.exception.BookingNotFoundException;
 import cl.acr.technicaltest.bookingrequests_api.infrastructure.exception.DatabaseException;
 import cl.acr.technicaltest.bookingrequests_api.infrastructure.mapper.BookingRequestEntityMapper;
+import cl.acr.technicaltest.bookingrequests_api.infrastructure.persistance.entity.BookingItemEntity;
 import cl.acr.technicaltest.bookingrequests_api.infrastructure.persistance.entity.BookingRequestEntity;
+import cl.acr.technicaltest.bookingrequests_api.infrastructure.persistance.entity.SupplierEntity;
+import cl.acr.technicaltest.bookingrequests_api.infrastructure.persistance.repository.BookingItemJpaRepository;
 import cl.acr.technicaltest.bookingrequests_api.infrastructure.persistance.repository.BookingRequestJpaRepository;
+import cl.acr.technicaltest.bookingrequests_api.infrastructure.persistance.repository.SupplierJpaRepository;
 import cl.acr.technicaltest.bookingrequests_api.infrastructure.persistance.specification.BookingRequestSpecification;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 
@@ -22,14 +29,18 @@ import java.util.Optional;
 public class BookingRequestRepositoryAdapter implements BookingRequestRepository {
 
     private final BookingRequestJpaRepository bookingRequestRepository;
+    private final BookingItemJpaRepository bookingItemJpaRepository;
+    private final SupplierJpaRepository supplierJpaRepository;
 
     private final BookingRequestEntityMapper mapper;
 
     public BookingRequestRepositoryAdapter(
-            BookingRequestJpaRepository bookingRequestRepository,
+            BookingRequestJpaRepository bookingRequestRepository, BookingItemJpaRepository bookingItemJpaRepository, SupplierJpaRepository supplierJpaRepository,
             BookingRequestEntityMapper mapper
     ) {
         this.bookingRequestRepository = bookingRequestRepository;
+        this.bookingItemJpaRepository = bookingItemJpaRepository;
+        this.supplierJpaRepository = supplierJpaRepository;
         this.mapper = mapper;
     }
 
@@ -81,24 +92,25 @@ public class BookingRequestRepositoryAdapter implements BookingRequestRepository
 
     @Override
     public BookingRequest create(BookingRequest request) {
-        BookingRequestEntity requestEntity = null;
         if(Objects.isNull(request)){
             throw new BookingNotFoundException("Error al intentar crear el registro de BookingRequest");
         }
 
+        BookingRequestEntity requestEntity = null;
         try{
             requestEntity = mapper.toBookingRequestEntity(request);
         }
         catch (DataAccessException ex){
             throw new DatabaseException("Error al intentar crear el nuevo registro", ex);
         }
-
+        requestEntity.setSupplier(searchSupplier(request.getSupplier().getId()));
+        requestEntity.setItems(searchBookingItem(request.getItems()));
 
         return mapper.toDomain(bookingRequestRepository.saveAndFlush(requestEntity));
     }
 
     @Override
-    public BookingRequest update(BookingRequest requestUpdate) {
+    public BookingRequest update(BookingRequestUpdate requestUpdate) {
 
         BookingRequest bookingRequest = null;
 
@@ -147,10 +159,10 @@ public class BookingRequestRepositoryAdapter implements BookingRequestRepository
 
             switch (bookingRequestBd.getStatus()){
                 case DRAFT:
-                    bookingRequestBd.setStatus(Status.CANCELLED);
+                    bookingRequestBd.setStatus(Status.CONFIRMED);
                     break;
                 case CONFIRMED:
-                    bookingRequestBd.setStatus(Status.CONFIRMED);
+                    bookingRequestBd.setStatus(Status.CANCELLED);
                     break;
                 case CANCELLED:
                     throw new BookingNotFoundException(
@@ -158,11 +170,36 @@ public class BookingRequestRepositoryAdapter implements BookingRequestRepository
                             id
                     );
             }
-            bookingRequest = mapper.toDomain(bookingRequestBd);
+
+            bookingRequest = mapper.toDomain(bookingRequestRepository.saveAndFlush(bookingRequestBd));
 
         } catch (DataAccessException e) {
             throw new DatabaseException("Error al intentar actualizar el registro Id: "+ id, e);
         }
         return bookingRequest;
+    }
+
+    public SupplierEntity searchSupplier(Long id){
+        Optional<SupplierEntity> supplierEntity = supplierJpaRepository.findById(id);
+        if(supplierEntity.isEmpty()){
+            throw new BookingNotFoundException(
+                    "No se puede obtener el proveedor", id);
+        }
+        return supplierEntity.get();
+    }
+
+    public List<BookingItemEntity> searchBookingItem(List<BookingItem> itemsList){
+        if(itemsList.isEmpty()){
+
+        }
+        return itemsList
+                .stream()
+                .map(BookingItem::getId)
+                .map(id -> bookingItemJpaRepository.findById(id)
+                        .orElseThrow(() ->
+                                new EntityNotFoundException(
+                                        "BookingItem no encontrado. Id: " + id
+                                )))
+                .toList();
     }
 }

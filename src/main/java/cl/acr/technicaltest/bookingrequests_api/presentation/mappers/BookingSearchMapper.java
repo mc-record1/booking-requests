@@ -3,10 +3,7 @@ package cl.acr.technicaltest.bookingrequests_api.presentation.mappers;
 import cl.acr.technicaltest.bookingrequests_api.domain.enums.FreightMode;
 import cl.acr.technicaltest.bookingrequests_api.domain.enums.Status;
 import cl.acr.technicaltest.bookingrequests_api.domain.exceptions.BookingNotFoundException;
-import cl.acr.technicaltest.bookingrequests_api.domain.model.BookingItem;
-import cl.acr.technicaltest.bookingrequests_api.domain.model.BookingRequest;
-import cl.acr.technicaltest.bookingrequests_api.domain.model.BookingSearchCriteria;
-import cl.acr.technicaltest.bookingrequests_api.domain.model.Supplier;
+import cl.acr.technicaltest.bookingrequests_api.domain.model.*;
 import cl.acr.technicaltest.bookingrequests_api.presentation.request.*;
 import cl.acr.technicaltest.bookingrequests_api.presentation.response.BookingItemResponse;
 import cl.acr.technicaltest.bookingrequests_api.presentation.response.BookingResponse;
@@ -86,13 +83,13 @@ public class BookingSearchMapper {
         return response;
     }
 
-    public BookingRequest toRequestUpdate(Long id, BookingRequestUpdate bookingRequest) {
+    public BookingRequestUpdate toRequestUpdate(Long id, UpdateBookingRequest bookingRequest) {
 
         if (bookingRequest == null) {
             throw new BookingNotFoundException("Error al mapear los valores de BookingActualizado");
         }
 
-        BookingRequest request = new BookingRequest();
+        BookingRequestUpdate request = new BookingRequestUpdate();
 
         request.setId(id);
         request.setIssueDate(bookingRequest.getIssueDate());
@@ -110,8 +107,9 @@ public class BookingSearchMapper {
         SupplierResponse response = new SupplierResponse();
         response.setId(supplier.getId());
         response.setName(supplier.getName());
-        response.setAddress(supplier.getAddress());
+        response.setTaxId(supplier.getTaxId());
         response.setCountry(supplier.getCountry());
+        response.setAddress(supplier.getAddress());
         response.setContactEmail(supplier.getContactEmail());
 
         return response;
@@ -173,6 +171,7 @@ public class BookingSearchMapper {
         Supplier response = new Supplier();
         response.setId(supplier.getId());
         response.setName(supplier.getName());
+        response.setTaxId(supplier.getTaxId());
         response.setAddress(supplier.getAddress());
         response.setCountry(supplier.getCountry());
         response.setContactEmail(supplier.getContactEmail());

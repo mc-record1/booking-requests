@@ -23,6 +23,16 @@ public class CreateBookingRequestUseCaseImpl implements CreateBookingRequestUseC
     @Override
     public BookingRequest create(BookingRequest request) {
         validBusinessRuler(request);
+        request.getItems().forEach(item ->
+                item.setTotalMount(
+                        item.getUnitPrice()
+                                .multiply(
+                                        java.math.BigDecimal.valueOf(
+                                                item.getQuantity()
+                                        )
+                                )
+                )
+        );
         return repository.create(request);
 
     }

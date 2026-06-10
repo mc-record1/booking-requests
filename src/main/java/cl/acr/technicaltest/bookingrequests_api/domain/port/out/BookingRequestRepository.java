@@ -1,6 +1,7 @@
 package cl.acr.technicaltest.bookingrequests_api.domain.port.out;
 
 import cl.acr.technicaltest.bookingrequests_api.domain.model.BookingRequest;
+import cl.acr.technicaltest.bookingrequests_api.domain.model.BookingRequestUpdate;
 import cl.acr.technicaltest.bookingrequests_api.domain.model.BookingSearchCriteria;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface BookingRequestRepository {
 
     BookingRequest create(BookingRequest request);
 
-    BookingRequest update(BookingRequest requestUpdate);
+    BookingRequest update(BookingRequestUpdate requestUpdate);
 
     BookingRequest updateStatus(Long id);
 }
